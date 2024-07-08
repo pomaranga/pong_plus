@@ -24,6 +24,12 @@ class Platforma:
         elif kierunek == 'down' and self.y < Wekranu - self.wysokosc:
             self.y += self.predkosc
             
+    def get_pos_x(self):
+        return self.x
+    
+    def get_pos_y(self):
+        return self.y
+            
 class Pilka():
     def __init__(self):
         self.x = width/2
@@ -32,6 +38,7 @@ class Pilka():
         self.kierunek_szer = 1
         self.trajektoria_x = 2
         self.trajektoria_y = 2
+        self.wielkosc = 20
         
     def reset_pilki(self):
         self.x = width / 2
@@ -46,13 +53,19 @@ class Pilka():
         if self.x == width:
             self.reset_pilki()
             
-        #if self.x - x == 5: # dotyka platformy
-        #    self.kierunek_szer = -1
+        #if self.x - x == 5: # kiedy kolizja
+        #    self.kierunek_szer = -1 #zmien kierunek pilki
             
         self.x += self.trajektoria_x*self.kierunek_szer
         self.y += self.trajektoria_y*self.kierunek_wys
             
-        rect(self.x, self.y, 20, 20) # kwadratowa pilka
+        rect(self.x, self.y, self.wielkosc, self.wielkosc) # kwadratowa pilka
+        
+    def get_pos_x(self):
+        return self.x
+    
+    def get_pos_y(self):
+        return self.y
 
 def setup():
     global lewaPlatforma, prawaPlatforma, pilka
@@ -69,8 +82,12 @@ def draw():
     rect(0, 0, width, height) # background
     lewaPlatforma.display()
     prawaPlatforma.display()
-    pilka.update() 
+    pilka.update()
     
+    if pilka.get_pos_x()+pilka.wielkosc/2 > prawaPlatforma.get_pos_x()+prawaPlatforma.szerokosc/2:
+        print('KRAWEDZ!')
+        if pilka.get_pos_y()+pilka.wielkosc/2 < prawaPlatforma.get_pos_y()+prawaPlatforma.wysokosc/2 and pilka.get_pos_y()+pilka.wielkosc/2 > prawaPlatforma.get_pos_y()-prawaPlatforma.wysokosc/2:
+                print("KOLIZJA!")
     if keyPressed:
         if key == 'w':
             lewaPlatforma.move('up')
