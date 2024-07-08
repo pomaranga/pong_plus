@@ -1,5 +1,7 @@
 import random 
 
+kropki = []
+
 Szekranu = 800
 Wekranu = 600
 
@@ -67,8 +69,27 @@ class Pilka():
     def get_pos_y(self):
         return self.y
 
+class Kropka:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.wielkosc = 40
+        self.jest = True
+        
+    def display(self):
+        if self.jest is True:
+            ellipse(self.x, self.y, self.wielkosc, self.wielkosc)
+            
+    def kolizja(self, pilka):
+        if (self.x - self.wielkosc / 2 <= pilka.get_pos_x() <= self.x + self.wielkosc / 2 and 
+            self.y - self.wielkosc / 2 <= pilka.get_pos_y() <= self.y + self.wielkosc / 2):
+            self.jest = False
+            kropki.pop()
+            #rect(200,200,200,200) test czy działa
+
+
 def setup():
-    global lewaPlatforma, prawaPlatforma, pilka
+    global lewaPlatforma, prawaPlatforma, pilka, kropki
     lewaPlatforma = Platforma(0, Wekranu/ 2 - wysokoscPlatformy/ 2)
     prawaPlatforma = Platforma(Szekranu - szerokoscPlatformy, Wekranu/ 2 - wysokoscPlatformy/ 2)
     pilka = Pilka()
@@ -77,12 +98,19 @@ def setup():
     frameRate(80)
     
 def draw():
-    global iteracja_programu, lewaPlatforma, prawaPlatforma, pilka
+    global iteracja_programu, lewaPlatforma, prawaPlatforma, pilka, kropki 
     #iteracja_programu +=1
     rect(0, 0, width, height) # background
     lewaPlatforma.display()
     prawaPlatforma.display()
     pilka.update()
+
+    if frameCount % (5 * 60) == 0:   #prędkość pojawiania sie kropek
+        kropki.append(Kropka(random.randint(0, width), random.randint(0, height)))
+    
+    for kropka in kropki:
+        kropka.display()
+        kropka.kolizja(pilka)
     
     if pilka.get_pos_x()+pilka.wielkosc/2 > prawaPlatforma.get_pos_x()+prawaPlatforma.szerokosc/2:
         print('KRAWEDZ!')
