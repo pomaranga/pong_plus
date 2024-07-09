@@ -9,6 +9,17 @@ szerokoscPlatformy = 10
 wysokoscPlatformy = 100
 predkoscPlatformy = 6
 
+screen = "start"
+
+button_start_width = 150
+button_start_height = 50
+
+button_controls_width = 150
+button_controls_height = 50
+
+button_back_width = 150
+button_back_height = 50
+
 class Platforma:
     def __init__(self, x, y):
         self.x = x
@@ -105,6 +116,15 @@ def setup():
     frameRate(80)
 
 def draw():
+    global screen
+    if screen == "start":
+        draw_start_screen()
+    elif screen == "game":
+        draw_game_screen()
+    elif screen == "controls":
+        draw_controls_screen()
+
+def draw_game_screen():
     global lewaPlatforma, prawaPlatforma, pilka, kropki, lewa_punkty, prawa_punkty, kontrola_predkosci
     background(0)  # czarne tło
     lewaPlatforma.display()
@@ -192,7 +212,63 @@ def draw():
             prawaPlatforma.move('up')
         elif keyCode == DOWN:
             prawaPlatforma.move('down')
-            
+
+def draw_start_screen():
+    background(0)
+    fill(255)
+    textSize(48)
+    textAlign(CENTER, CENTER)
+    text("Pong Plus", width / 2, height / 2 - 100)
     
+    button_start_x = width / 2 - button_start_width / 2
+    button_start_y = height / 2
     
-        
+    button_controls_x = width / 2 - button_controls_width / 2
+    button_controls_y = height / 2 + 70
+
+    draw_button(button_start_x, button_start_y, button_start_width, button_start_height, "Start")
+    draw_button(button_controls_x, button_controls_y, button_controls_width, button_controls_height, "Sterowanie")
+    
+def draw_controls_screen():
+    background(0)  
+    fill(255)
+    textSize(24)
+    textAlign(CENTER, CENTER)
+    text("Sterowanie:", width / 2, height / 2 - 100)
+    text("Lewy gracz: W / S", width / 2, height / 2 - 40)
+    text("Prawy gracz: UP / DOWN", width / 2, height / 2)
+
+    button_back_x = width / 2 - button_back_width / 2
+    button_back_y = height - 100
+
+    draw_button(button_back_x, button_back_y, button_back_width, button_back_height, "Powrot")
+
+def draw_button(x, y, w, h, label):
+    fill(100, 100, 255)
+    rect(x, y, w, h)
+    fill(255)
+    textSize(24)
+    textAlign(CENTER, CENTER)
+    text(label, x + w / 2, y + h / 2)
+
+def mousePressed():
+    global screen
+    if screen == "start":
+        button_start_x = width / 2 - button_start_width / 2
+        button_start_y = height / 2
+        button_controls_x = width / 2 - button_controls_width / 2
+        button_controls_y = height / 2 + 70
+
+        if button_start_x < mouseX < button_start_x + button_start_width and button_start_y < mouseY < button_start_y + button_start_height:
+            screen = "game"
+        elif button_controls_x < mouseX < button_controls_x + button_controls_width and button_controls_y < mouseY < button_controls_y + button_controls_height:
+            screen = "controls"
+    elif screen == "controls":
+        button_back_x = width / 2 - button_back_width / 2
+        button_back_y = height - 100
+
+        if button_back_x < mouseX < button_back_x + button_back_width and button_back_y < mouseY < button_back_y + button_back_height:
+            screen = "start"
+
+def keyReleased():
+    pass    
