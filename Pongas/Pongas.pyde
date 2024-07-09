@@ -173,6 +173,7 @@ def draw():
     text(str(lewa_punkty), Szekranu / 4, 50)
     text(str(prawa_punkty), 3 * Szekranu / 4, 50)
 
+# KROPKI
 
     if frameCount % (5 * 60) == 0:  # prędkość pojawiania się kropek
         kropki.append(Kropka(random.randint(0, Szekranu), random.randint(0, Wekranu)))
