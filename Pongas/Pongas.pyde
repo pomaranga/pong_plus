@@ -97,10 +97,10 @@ class Kropka:
             ellipse(self.x, self.y, self.wielkosc, self.wielkosc)
 
     def kolizja(self, pilka):
-        if (self.x - self.wielkosc / 2 <= pilka.get_pos_x() <= self.x + self.wielkosc / 2 and 
-            self.y - self.wielkosc / 2 <= pilka.get_pos_y() <= self.y + self.wielkosc / 2):
+        if (self.x - self.wielkosc / 2 <= pilka.get_pos_x()+pilka.wielkosc/2 <= self.x + self.wielkosc / 2 and 
+            self.y - self.wielkosc / 2 <= pilka.get_pos_y()+pilka.wielkosc/2 <= self.y + self.wielkosc / 2):
             self.jest = False
-            kropki.pop()
+            # kropki.pop() - pop zdejmuje ostatnią z listy, a u Ciebie za wyświetlanie odpowiada self.jest, więc jest to zbędne i powoduje te niespodziewane zniknięcia kropek
             
    
     
